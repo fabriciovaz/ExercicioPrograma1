@@ -24,20 +24,37 @@ public class DigitalHouseManager {  //Esta classe contém as listas e os seus m�
     }
 
     public void excluirCurso(Integer codigoCurso){
-        for (Curso i:cursos) {      //for each
-          if (i.getIdCurso() == codigoCurso){
-              cursos.remove(i);
-          }
+        for (int i=0; i<cursos.size(); i++) {
+            if (cursos.get(i).getIdCurso()==codigoCurso) {
+                cursos.remove(cursos.get(i));
+                cancelarMatriculaCurso(codigoCurso);
+
+            }
         }
     }
 
     public void excluirProfessor(Integer codigoProfessor){
 
-        for (Professor i:professores) {      //for each: o iterador i é um objeto do tipo professor, percorrendo todas a
-            if (i.getIdProfessor() == codigoProfessor){  //posicoes na lista professores
-                professores.remove(i);
+        for (int i=0; i<professores.size(); i++) {
+            if (professores.get(i).getIdProfessor()==codigoProfessor) {
+                professores.remove(professores.get(i));
+
             }
         }
+        for (int j=0; j<cursos.size(); j++) {
+            if (cursos.get(j).proftitular.getIdProfessor()==codigoProfessor) {
+                cursos.get(j).proftitular.setNome("Professor não cadastrado!");
+                cursos.get(j).proftitular.setSobrenome("Professor não cadastrado!");
+                cursos.get(j).proftitular.setIdProfessor(0);
+            }
+            if (cursos.get(j).profadjunto.getIdProfessor()==codigoProfessor) {
+                cursos.get(j).profadjunto.setNome("Professor não cadastrado!");
+                cursos.get(j).profadjunto.setSobrenome("Professor não cadastrado!");
+                cursos.get(j).profadjunto.setIdProfessor(0);
+            }
+
+        }
+
     }
 
 
@@ -59,28 +76,36 @@ public class DigitalHouseManager {  //Esta classe contém as listas e os seus m�
 
     public void excluirAluno(Integer codigoAluno){
 
-        for (Aluno i:alunos) {
-            if (i.getIdAluno() == codigoAluno){
-                alunos.remove(i.getIdAluno());
+        for (int i=0; i<alunos.size(); i++) {
+            if (alunos.get(i).getIdAluno()==codigoAluno) {
+                alunos.remove(alunos.get(i));
+                cancelarMatriculaAluno(codigoAluno);
             }
         }
     }
 
-    public void cancelarMatriculaAluno(Integer codigoAluno){
+    public void cancelarMatriculaAluno(Integer codigoAluno){//Não foi possível utilizar o for each
 
-        for (Iterator<Matricula> i = matriculas.iterator(); i.hasNext();) {
-            Matricula matricula = i.next();
-            if (matricula.aluno.getIdAluno()==codigoAluno) {
-                i.remove();
+        for (int i=0; i<matriculas.size(); i++) {
+            if (matriculas.get(i).aluno.getIdAluno()==codigoAluno) {
+                matriculas.remove(matriculas.get(i));
+               matriculas.get(i).curso.setnAlunosMatriculados(matriculas.get(i).curso.getnAlunosMatriculados()-1); //Diminui 1 no contador nAlunos Matriculados;
             }
         }
-        //altera a matricula
-//        for (Matricula i:matriculas) {
-//            if (i.aluno.getIdAluno() == codigoAluno){
-//                matriculas.remove(i);
-//            }
-//        }
     }
+
+    public void cancelarMatriculaCurso(Integer codigoCurso){//Não foi possível utilizar o for each
+
+        for (int i=0; i<matriculas.size(); i++) {
+            if (matriculas.get(i).curso.getIdCurso()==codigoCurso) {
+                matriculas.remove(matriculas.get(i));
+                i--;
+
+            }
+        }
+    }
+
+
 
     public void matricularAluno(Integer codigoAluno, Integer codigoCurso){
         for (Aluno i:alunos) {      //for each
@@ -91,7 +116,7 @@ public class DigitalHouseManager {  //Esta classe contém as listas e os seus m�
                             Calendar calendar1 = Calendar.getInstance();
                             Matricula matricula01 = new Matricula(i, j, calendar1);
                             matriculas.add(matricula01);
-                            Curso.nAlunosNoCurso++; //Altera o contador estático
+                            j.setnAlunosMatriculados(j.getnAlunosMatriculados()+1); //Adiciona 1 no contador n
                             System.out.println("Matrícula realizada com sucesso!");
                         }
                             else{
@@ -103,6 +128,17 @@ public class DigitalHouseManager {  //Esta classe contém as listas e os seus m�
             }
         }
     }
+
+    public int nAlunosMatriculados(int codigoCurso) {
+       int n=0;
+        for (Matricula i : matriculas) {      //Obtém o número de alunos em um curso
+            if (i.curso.getIdCurso() == codigoCurso) {
+                n++;
+            }
+        }
+        return n;
+    }
+
 
 
     public void alocarProfessores(Integer codigoCurso, Integer codigoProfessorTitular, Integer codigoProfessorAdjunto){

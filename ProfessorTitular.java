@@ -7,4 +7,13 @@ public class ProfessorTitular extends Professor { //Herda características da cl
         super(nome, sobrenome, tempoDeCasa, id);
         this.especialidade = especialidade;
     }
+
+    public String getEspecialidade() {
+        return this.especialidade;
+    }
+
+    public void setEspecialidade(String especialidade) {
+        this.especialidade = especialidade;
+    }
+
 }

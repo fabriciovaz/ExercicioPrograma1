@@ -6,22 +6,19 @@ public class Curso {   //Esta classe permite caracterizar um curso com nome, Id,
     Professor proftitular;
     Professor profadjunto;
     int quantMaxAlunos;
-    List Alunos;
-    static int nAlunosNoCurso = 0;
+    Aluno aluno;
+    int nAlunosMatriculados =0;
 
-    public static void setnAlunosNoCurso(int nAlunosNoCurso) {
-        Curso.nAlunosNoCurso = nAlunosNoCurso;
-    }
 
 
     //Sobrecarga nos metodos construtores
-    public Curso(String nomeCurso, int idCurso, Professor proftitular, Professor profadjunto, int quantMaxAlunos, List alunos) {
+    public Curso(String nomeCurso, int idCurso, Professor proftitular, Professor profadjunto, int quantMaxAlunos, Aluno aluno) {
         this.nomeCurso = nomeCurso;
         this.idCurso = idCurso;
         this.proftitular = proftitular;
         this.profadjunto = profadjunto;
         this.quantMaxAlunos = quantMaxAlunos;
-        Alunos = alunos;
+        this.aluno = aluno;
     }
 
     public Curso(String nomeCurso, int idCurso, int quantMaxAlunos) {
@@ -73,19 +70,19 @@ public class Curso {   //Esta classe permite caracterizar um curso com nome, Id,
         this.quantMaxAlunos = quantMaxAlunos;
     }
 
-    public List getAlunos() {
-        return Alunos;
+
+
+    public int getnAlunosMatriculados() {
+        return this.nAlunosMatriculados;
     }
 
-    public void setAlunos(List alunos) {
-        Alunos = alunos;
+    public void setnAlunosMatriculados(int nAlunosMatriculados) {
+        this.nAlunosMatriculados = nAlunosMatriculados;
     }
-
-
 
     public Boolean adicionarUmAluno(Aluno umAluno) {// Compara a variavel estatica nAlunosNoCurso com a quantidadeMaxAlunos
         boolean resposta;                           // nesse curso
-        if (Curso.nAlunosNoCurso < this.quantMaxAlunos) {
+        if (nAlunosMatriculados < this.quantMaxAlunos) {
             resposta = true;
         } else {
             resposta = false;
@@ -93,7 +90,5 @@ public class Curso {   //Esta classe permite caracterizar um curso com nome, Id,
         return resposta;
     }
 
-    public void excluirAluno(Aluno umAluno){
-        Alunos.remove(umAluno);
-    }
+
 }
